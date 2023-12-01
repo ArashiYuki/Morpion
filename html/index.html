@@ -4,8 +4,59 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Morpion</title>
+	<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
+	<h1 class="text-center mb-5">Morpion</h1>
+	<main class="container text-center">
+		<div class="row">
+			<div class="col-3 d-flex flex-column justify-content-evenly align-content-center flex-wrap player player-1">
+				<h2>Player 1</h2>
+				<!-- clickable image to choose symbol -->
+				<button class="btn w-75 coin" id="xmark-player1" onclick="chosenSymbol(11)">
+					<img class="w-25" src="../img/xmark-solid.svg" alt="xmark">
+				</button>
+				<button class="btn w-75 coin" id="circle-player1" onclick="chosenSymbol(12)">
+					<img class="w-25" src="../img/circle-regular.svg" alt="circle">
+				</button>
+				<button class="btn btn-success" id="button-start-1" onclick="start(1)">START</button> <!-- Start game when the 2 players have clicked it -->
+			</div>
+
+			<div class="col-6">
+				<table class="table table-bordered border border-3 table-responsive align-middle">
+					<tr>
+						<td id="1"></td>
+						<td id="2"></td>
+						<td id="3"></td>
+					</tr>
+					<tr>
+						<td id="4"></td>
+						<td id="5"></td>
+						<td id="6"></td>
+					</tr>
+					<tr>
+						<td id="7"></td>
+						<td id="8"></td>
+						<td id="9"></td>
+					</tr>
+				</table>
+			</div>
 	
+			<div class="col-3 d-flex flex-column justify-content-evenly align-content-center flex-wrap player player-2">
+				<h2>Player 2</h2>
+				<!-- clickable image to choose symbol -->
+				<button class="btn w-75 coin" id="xmark-player2" onclick="chosenSymbol(21)">
+					<img class="w-25" src="../img//xmark-solid.svg" alt="xmark">
+				</button>
+				<button class="btn w-75 coin" id="circle-player2" onclick="chosenSymbol(22)">
+					<img class="w-25" src="../img/circle-regular.svg" alt="circle">
+				</button>
+				<button class="btn btn-success" id="button-start-2" onclick="start(2)">START</button> <!-- Start game when the 2 players have clicked it -->
+			</div>
+		</div>
+	</main>
+	<script src="../script/main.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
