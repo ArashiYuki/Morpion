@@ -1,5 +1,4 @@
-// TODO : prevent players from clicking start button when the party has already started
-// TODO : stop the game when there is a winner (maybe offer to start a new one)
+//TODO : afficher le gagnant en grand et mettre le bouton restart avec
 
 // Case's number
 //  ——— ——— ———
@@ -10,11 +9,8 @@
 // | 7 | 8 | 9 |
 //  ——— ——— ———
 
-// Player that is playing : 1 meaning player1 and 2 player2
-var playerTurn = 1;
-var isGameFinished = false;
-var count = 0;
-var winner = 0;
+var playerTurn = 1; // Player that is playing : 1 meaning player1 and 2 player2
+var count = 0;		// count how many cases have been clicked (to stop at 9, when all have been clicked)
 
 var player1Symbol = "";
 var player2Symbol = "";
@@ -24,6 +20,7 @@ var IsPlayer2Ready = false;
 
 var buttonStartPlayer1 = document.querySelector('#button-start-1');
 var buttonStartPlayer2 = document.querySelector('#button-start-2');
+var restartButton = document.querySelector('#restart-button');
 
 // n°XY where X is the player number and Y the shape number (1 meaning xmark and 2 meaning circle)
 var xCrossPlayer1 = document.querySelector('#xmark-player1'); 		// Coin n°11
@@ -90,6 +87,11 @@ function start(playerId) {
 }
 
 function game() {
+	// Prevent players from clicking start button when the party has already started
+	buttonStartPlayer1.disabled = true;
+	buttonStartPlayer2.disabled = true;
+
+	// EventListener for all cases
 	case1.addEventListener('click', addSymbolInCase);
 	case1.myParam = case1;
 
@@ -116,12 +118,6 @@ function game() {
 
 	case9.addEventListener('click', addSymbolInCase);
 	case9.myParam = case9;
-
-	console.log(count);
-	if (count >= 9 ) {
-		console.log("end of game !");
-		return null
-	}
 }
 
 function addSymbolInCase(evt) {
@@ -131,12 +127,12 @@ function addSymbolInCase(evt) {
 	img.className = "w-50";
 	if (playerTurn == 1) {
 		img.src = "../img/" + player1Symbol;
-		img.alt = player1Symbol; 				// change to have all aside from .svg
+		img.alt = player1Symbol.substring(0, 6);
 		playerTurn = 2;
 		listCasesContent[caseIdNumber-1] = 1;
 	} else if (playerTurn == 2) {
 		img.src = "../img/" + player2Symbol;
-		img.alt = player2Symbol; 				// change to have all aside from .svg
+		img.alt = player2Symbol.substring(0, 6);
 		playerTurn = 1;
 		listCasesContent[caseIdNumber-1] = 2;
 	} else {
@@ -145,7 +141,6 @@ function addSymbolInCase(evt) {
 	caseToChange.appendChild(img);
 	caseToChange.removeEventListener('click', addSymbolInCase); // prevent players from clicking a case already used
 	count++;
-	console.log(count);
 	verificationWinner();
 }
 
@@ -172,11 +167,88 @@ function verificationWinner() {
 		(listCasesContent[0] == listCasesContent[4] && listCasesContent[0] == listCasesContent[8] && listCasesContent[0] != 0) || // first digonal verrification
 		(listCasesContent[6] == listCasesContent[4] && listCasesContent[6] == listCasesContent[2] && listCasesContent[6] != 0))   // second digonal verrification
 		{
+			var winner = 0;
 			if (playerTurn == 1) {
 				winner = 2;
 			} else if (playerTurn == 2) {
 				winner = 1;
 			}
-			console.log("player" + winner + "has won");
+			gameFinished();
+	} else if (count == 9) {
+		gameFinished();
 	}
+}
+
+function gameFinished() {
+	restartButton.className = "btn btn-success";
+
+	case1.removeEventListener('click', addSymbolInCase);
+	case2.removeEventListener('click', addSymbolInCase);
+	case3.removeEventListener('click', addSymbolInCase);
+	case4.removeEventListener('click', addSymbolInCase);
+	case5.removeEventListener('click', addSymbolInCase);
+	case6.removeEventListener('click', addSymbolInCase);
+	case7.removeEventListener('click', addSymbolInCase);
+	case8.removeEventListener('click', addSymbolInCase);
+	case9.removeEventListener('click', addSymbolInCase);
+}
+
+function restart() {
+	console.log("ok restarting the game !")
+	// Renitialize values
+	playerTurn = 1;
+	count = 0;
+
+	player1Symbol = "";
+	player2Symbol = "";
+
+	IsPlayer1Ready = false;
+	IsPlayer2Ready = false;
+
+	listCasesContent = [0, 0, 0,
+		0, 0, 0,
+		0, 0, 0 ];
+
+	// Renitialize player choice and buttons
+	xCrossPlayer1.style.border = "none";
+	circlePlayer1.style.border = "none";
+	xCrossPlayer2.style.border = "none";
+	circlePlayer2.style.border = "none";
+
+	buttonStartPlayer1.disabled = false;
+	buttonStartPlayer1.className = "btn btn-success";
+	buttonStartPlayer2.disabled = false;
+	buttonStartPlayer2.className = "btn btn-success";
+
+	// Renitialize cases
+	if (case1.hasChildNodes()) {
+		case1.firstChild.remove();
+	}
+	if (case2.hasChildNodes()) {
+		case2.firstChild.remove();
+	}
+	if (case3.hasChildNodes()) {
+		case3.firstChild.remove();
+	}
+	if (case4.hasChildNodes()) {
+		case4.firstChild.remove();
+	}
+	if (case5.hasChildNodes()) {
+		case5.firstChild.remove();
+	}
+	if (case6.hasChildNodes()) {
+		case6.firstChild.remove();
+	}
+	if (case7.hasChildNodes()) {
+		case7.firstChild.remove();
+	}
+	if (case8.hasChildNodes()) {
+		case8.firstChild.remove();
+	}
+	if (case9.hasChildNodes()) {
+		case9.firstChild.remove();
+	}
+
+	// Restart button is not visible
+	restartButton.className += " visually-hidden";
 }
