@@ -1,4 +1,5 @@
-//TODO : prevent players from clicking start button when the party has already started
+// TODO : prevent players from clicking start button when the party has already started
+// TODO : stop the game when there is a winner (maybe offer to start a new one)
 
 // Case's number
 //  ——— ——— ———
@@ -13,6 +14,7 @@
 var playerTurn = 1;
 var isGameFinished = false;
 var count = 0;
+var winner = 0;
 
 var player1Symbol = "";
 var player2Symbol = "";
@@ -122,19 +124,21 @@ function game() {
 	}
 }
 
-// TODO: récupérer le numéro de la case pour ajouter le numéro du joueur dans la liste
 function addSymbolInCase(evt) {
 	caseToChange = evt.currentTarget.myParam;
+	caseIdNumber = caseToChange.id[4];
 	var img = document.createElement('img');
 	img.className = "w-50";
 	if (playerTurn == 1) {
 		img.src = "../img/" + player1Symbol;
 		img.alt = player1Symbol; 				// change to have all aside from .svg
 		playerTurn = 2;
+		listCasesContent[caseIdNumber-1] = 1;
 	} else if (playerTurn == 2) {
 		img.src = "../img/" + player2Symbol;
 		img.alt = player2Symbol; 				// change to have all aside from .svg
 		playerTurn = 1;
+		listCasesContent[caseIdNumber-1] = 2;
 	} else {
 		return "that player doesn't exist";
 	}
@@ -142,17 +146,37 @@ function addSymbolInCase(evt) {
 	caseToChange.removeEventListener('click', addSymbolInCase); // prevent players from clicking a case already used
 	count++;
 	console.log(count);
+	verificationWinner();
 }
 
-// TODO : vérifier les lignes, les colonnes et les diagonales 1 par 1 pour vérifier si un joueur a gagné
-// Because a list index starts at 0 table is now
+// A list index starts at 0 so table is now
 //  ——— ——— ———
 // | 0 | 1 | 2 |
 //  ——— ——— ———
 // | 3 | 4 | 5 |
 //  ——— ——— ———
-// | 6 | 7 | 9 |
+// | 6 | 7 | 8 |
 //  ——— ——— ———
-function VerificationWinner() {
+function verificationWinner() {
+		// LINES
+	if ((listCasesContent[0] == listCasesContent[1] && listCasesContent[0] == listCasesContent[2] && listCasesContent[0] != 0) || // first line verrification
+		(listCasesContent[3] == listCasesContent[4] && listCasesContent[3] == listCasesContent[5] && listCasesContent[3] != 0) || // second line verrification
+		(listCasesContent[6] == listCasesContent[7] && listCasesContent[6] == listCasesContent[8] && listCasesContent[6] != 0) || // third line verrification
 
+		// COLUMNS
+		(listCasesContent[0] == listCasesContent[3] && listCasesContent[0] == listCasesContent[6] && listCasesContent[0] != 0) || // first column verrification
+		(listCasesContent[1] == listCasesContent[4] && listCasesContent[1] == listCasesContent[7] && listCasesContent[1] != 0) || // second column verrification
+		(listCasesContent[2] == listCasesContent[5] && listCasesContent[2] == listCasesContent[8] && listCasesContent[2] != 0) || // third column verrification
+
+		// DIAGONALS
+		(listCasesContent[0] == listCasesContent[4] && listCasesContent[0] == listCasesContent[8] && listCasesContent[0] != 0) || // first digonal verrification
+		(listCasesContent[6] == listCasesContent[4] && listCasesContent[6] == listCasesContent[2] && listCasesContent[6] != 0))   // second digonal verrification
+		{
+			if (playerTurn == 1) {
+				winner = 2;
+			} else if (playerTurn == 2) {
+				winner = 1;
+			}
+			console.log("player" + winner + "has won");
+	}
 }
