@@ -1,5 +1,3 @@
-//TODO : afficher le gagnant en grand et mettre le bouton restart avec
-
 // Case's number
 //  ——— ——— ———
 // | 1 | 2 | 3 |
@@ -20,6 +18,10 @@ var IsPlayer2Ready = false;
 
 var buttonStartPlayer1 = document.querySelector('#button-start-1');
 var buttonStartPlayer2 = document.querySelector('#button-start-2');
+
+// End of game's elements
+var sectionEndGame = document.querySelector('#section-end-game');
+var displayWinner = document.querySelector('#winner');
 var restartButton = document.querySelector('#restart-button');
 
 // n°XY where X is the player number and Y the shape number (1 meaning xmark and 2 meaning circle)
@@ -167,20 +169,27 @@ function verificationWinner() {
 		(listCasesContent[0] == listCasesContent[4] && listCasesContent[0] == listCasesContent[8] && listCasesContent[0] != 0) || // first digonal verrification
 		(listCasesContent[6] == listCasesContent[4] && listCasesContent[6] == listCasesContent[2] && listCasesContent[6] != 0))   // second digonal verrification
 		{
+			// The player that won is the one who isn't playing now because is turn just finished
 			var winner = 0;
 			if (playerTurn == 1) {
 				winner = 2;
 			} else if (playerTurn == 2) {
 				winner = 1;
 			}
-			gameFinished();
+			gameFinished(winner);
 	} else if (count == 9) {
-		gameFinished();
+		winner = 0;
+		gameFinished(winner);
 	}
 }
 
-function gameFinished() {
-	restartButton.className = "btn btn-success";
+function gameFinished(winner) {
+	if (winner == 0 ) {
+		displayWinner.innerHTML = "Equality !";
+	} else {
+		displayWinner.innerHTML = "Player " + winner + " has won this party !";
+	}
+	sectionEndGame.classList.remove("visually-hidden");
 
 	case1.removeEventListener('click', addSymbolInCase);
 	case2.removeEventListener('click', addSymbolInCase);
@@ -194,7 +203,6 @@ function gameFinished() {
 }
 
 function restart() {
-	console.log("ok restarting the game !")
 	// Renitialize values
 	playerTurn = 1;
 	count = 0;
@@ -249,6 +257,6 @@ function restart() {
 		case9.firstChild.remove();
 	}
 
-	// Restart button is not visible
-	restartButton.className += " visually-hidden";
+	// End game's section is no longer visible since a new game has been started
+	sectionEndGame.classList.add("visually-hidden");
 }
